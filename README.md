@@ -154,8 +154,8 @@ EOF  all  create  destroy  help  quit  show  update
 No known bugs at this time. 
 
 ## Authors
-Terry Mochire - [Github](https://github.com/Terry-Mochire) 
-Nelly Maina - [Github](https://github.com/Nellymaina)
+* Terry Mochire - [Github](https://github.com/Terry-Mochire) 
+* Nelly Maina - [Github](https://github.com/Nellymaina)
 
 Second part of Airbnb: Joann Vuong
 ## License
