@@ -119,43 +119,28 @@ class TestFileStorage(unittest.TestCase):
             js = f.read()
         self.assertEqual(json.loads(string), json.loads(js))
 
+    @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
     def test_get(self):
-        """Test get method"""
+        """ Tests method for obtaining an instance file storage"""
         storage = FileStorage()
-        new_dict = {}
-        for key, value in classes.items():
-            instance = value()
-            instance_key = instance.__class__.__name__ + "." + instance.id
-            new_dict[instance_key] = instance
-        save = FileStorage._FileStorage__objects
-        FileStorage._FileStorage__objects = new_dict
+        dic = {"name": "Vecindad"}
+        instance = State(**dic)
+        storage.new(instance)
         storage.save()
-        FileStorage._FileStorage__objects = save
-        for key, value in new_dict.items():
-            new_dict[key] = value.to_dict()
-        string = json.dumps(new_dict)
-        with open("file.json", "r") as f:
-            js = f.read()
-        self.assertEqual(json.loads(string), json.loads(js))
-        self.assertEqual(storage.get("State", "1234-1234-1234"), None)
+        storage = FileStorage()
+        get_instance = storage.get(State, instance.id)
+        self.assertEqual(get_instance, instance)
 
+    @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
     def test_count(self):
-        """Test count method"""
+        """ Tests count method file storage """
         storage = FileStorage()
-        new_dict = {}
-        for key, value in classes.items():
-            instance = value()
-            instance_key = instance.__class__.__name__ + "." + instance.id
-            new_dict[instance_key] = instance
-        save = FileStorage._FileStorage__objects
-        FileStorage._FileStorage__objects = new_dict
+        dic = {"name": "Vecindad"}
+        state = State(**dic)
+        storage.new(state)
+        dic = {"name": "Mexico"}
+        city = City(**dic)
+        storage.new(city)
         storage.save()
-        FileStorage._FileStorage__objects = save
-        for key, value in new_dict.items():
-            new_dict[key] = value.to_dict()
-        string = json.dumps(new_dict)
-        with open("file.json", "r") as f:
-            js = f.read()
-        self.assertEqual(json.loads(string), json.loads(js))
-        self.assertEqual(storage.count("State"), 0)
-        self.assertEqual(storage.count(), 0)
+        c = storage.count()
+        self.assertEqual(len(storage.all()), c)
